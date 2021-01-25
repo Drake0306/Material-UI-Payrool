@@ -82,6 +82,7 @@ if (userName != null) {
       children: [
         // Login
         { path: 'login', element: <LoginView /> },
+        { path: '/', element: <Navigate to="login" /> },
         { path: '*', element: <Navigate to="login" /> }
       ]
     }

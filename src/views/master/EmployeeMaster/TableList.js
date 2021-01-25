@@ -41,7 +41,7 @@ export default function BasicExport() {
 
   return (
     <MaterialTable
-      style={{fontFamily: 'Roboto, Helvetica, Arial, sans-serif', padding: '10px', fontSize: '14px'}}
+      style={{fontFamily: 'Roboto, Helvetica, Arial, sans-serif', padding: '10px', fontSize: '14px', maxHeight: '500px', overflowX: 'auto'}}
       title="Employee List"
       columns={[
         { title: 'Name', field: 'name' },
@@ -62,20 +62,27 @@ export default function BasicExport() {
         exportButton: true,
         filtering: false,
         grouping: true,
-        selection: true,
+        // selection: true,
         rowStyle: rowData => ({
           backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'
         })
       }}
       actions={[
         {
-          tooltip: 'Remove All Selected Users',
-          icon: 'delete',
-          onClick: (evt, data) => {
-            console.log(data);
-            alert('You want to delete ' + data.length + ' rows');
+          icon: 'edit',
+          tooltip: 'Edit Employee',
+          onClick: (event, rowData) => {
+            alert('You saved ' + rowData.name);
           }
-        }
+        },
+        {
+          icon: 'keyboard_arrow_right',
+          position: 'row',
+          tooltip: 'View Employee',
+          onClick: (event, rowData) => {
+            alert('You saved ' + rowData.name);
+          }
+        },
       ]}
     />
   );

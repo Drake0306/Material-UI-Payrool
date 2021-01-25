@@ -2,6 +2,7 @@
 /* eslint-disable no-multiple-empty-lines */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable react/jsx-wrap-multilines */
+/* eslint-disable no-restricted-globals */
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -65,6 +66,11 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const classes = useStyles();
   const navigate = useNavigate();
+  const username = localStorage.getItem('username');
+  if (username != null) {
+    console.log('ok');
+    navigate('/app/dashboard', { replace: false });
+  }
 
   return (
     <Container component="main" maxWidth="xs">

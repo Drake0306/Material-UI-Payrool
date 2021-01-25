@@ -42,7 +42,7 @@ const Account = () => {
         >
           <Grid
             item
-            lg={8}
+            lg={9}
             md={12}
             xs={12}
           >

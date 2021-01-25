@@ -23,6 +23,7 @@ import {
 } from '@material-ui/core';
 import ListIcon from '@material-ui/icons/List';
 import { replace } from 'formik';
+import SaveIcon from '@material-ui/icons/Save';
 import { useNavigate } from 'react-router-dom';
 
 const states = [
@@ -49,6 +50,7 @@ const FormEntry = ({ className, ...rest }) => {
   const [values, setValues] = useState({
     firstName: 'Katarina',
     lastName: 'Smith',
+    middleName: '',
     email: 'demo@devias.io',
     phone: '',
     state: 'Alabama',
@@ -99,6 +101,21 @@ const FormEntry = ({ className, ...rest }) => {
                 onChange={handleChange}
                 required
                 value={values.firstName}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                helperText=""
+                label="Middle name"
+                name="middleName"
+                onChange={handleChange}
+                value={values.middleName}
                 variant="outlined"
               />
             </Grid>
@@ -197,8 +214,9 @@ const FormEntry = ({ className, ...rest }) => {
           p={2}
         >
           <Button
-            color="primary"
+            color="danger"
             variant="contained"
+            startIcon={<SaveIcon />}
           >
             Save details
           </Button>
