@@ -85,6 +85,7 @@ const TopBar = ({
     }
   }
 
+
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = React.useRef(open);
   React.useEffect(() => {
@@ -102,15 +103,18 @@ const TopBar = ({
       {...rest}
     >
       <Toolbar>
-        <RouterLink to="/">
+        <Hidden mdDown>
+        <RouterLink to="/app/dashboard">
           <Logo />
         </RouterLink>
         <Box flexGrow={1} />
-        <Hidden mdDown>
           <IconButton color="inherit">
               <NotificationsIcon />
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton 
+            color="inherit"
+            onClick={handleToggle}  
+          >
             <Badge
               badgeContent={notifications.length}
               color="secondary"
@@ -120,7 +124,6 @@ const TopBar = ({
                 ref={anchorRef}
                 aria-controls={open ? 'menu-list-grow' : undefined}
                 aria-haspopup="true"
-                onClick={handleToggle}      
               />
               <Popper 
                 open={open} 

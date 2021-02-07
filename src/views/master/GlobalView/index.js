@@ -15,7 +15,13 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
+  },
+  multi: {
+    padding: '0px'
+  },
+  '.MuiBox-root-22': {
+    padding: '0px'
   }
 }));
 
@@ -27,9 +33,11 @@ const GlobalMaster = () => {
       className={classes.root}
       title="Settings"
     >
-      <Container maxWidth="xl">
+      <Container maxWidth={false}>
         <Breadcrumbs />
-        <Box mt={3}>
+        <Box
+          mt={3}
+        >
           <VerticalTabs />
         </Box>
       </Container>

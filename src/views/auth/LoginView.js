@@ -65,13 +65,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
+
   const navigate = useNavigate();
   const username = localStorage.getItem('username');
+
   if (username != null) {
-    console.log('ok');
-    navigate('/app/dashboard', { replace: false });
+    navigate('/app/dashboard', { replace: true });
   }
 
+  
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

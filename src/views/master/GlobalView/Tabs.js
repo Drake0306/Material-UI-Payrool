@@ -48,7 +48,14 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     width: '100%',
     backgroundColor: theme.palette.background.grey,
+    padding: '0px'
   },
+  multi: {
+    padding: '0px'
+  },
+  '.MuiBox-root-22': {
+    padding: '0px'
+  }
 }));
 
 export default function ScrollableTabsButtonAuto() {
@@ -61,7 +68,7 @@ export default function ScrollableTabsButtonAuto() {
 
   return (
     <Box className={classes.root}>
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="default" className={classes.multi}>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -70,7 +77,7 @@ export default function ScrollableTabsButtonAuto() {
           variant="scrollable"
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
-          style={{ backgroundColor: 'white' }}
+          style={{ backgroundColor: 'white', padding: '0px' }}
         >
           <Tab label="Employee" {...a11yProps(0)} />
           <Tab label="Item Two" {...a11yProps(1)} />

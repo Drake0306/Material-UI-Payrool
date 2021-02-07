@@ -23,12 +23,20 @@ import { useNavigate } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    padding: '0px'
+  },
   importButton: {
     marginRight: theme.spacing(1)
   },
   exportButton: {
     marginRight: theme.spacing(1)
+  },
+  muibox: {
+    padding: '0px'
+  },
+  '.MuiBox-root-22': {
+    padding: '0px'
   }
 }));
 
@@ -47,6 +55,7 @@ const Toolbar = ({ className, ...rest }) => {
       {...rest}
     >
       <Box
+        className={classes.muibox}
         display="flex"
         justifyContent="flex-start"
       >
@@ -63,6 +72,7 @@ const Toolbar = ({ className, ...rest }) => {
         
       </Box>
       <Box
+        className={classes.muibox}
         display="flex"
         justifyContent="flex-end"
       >

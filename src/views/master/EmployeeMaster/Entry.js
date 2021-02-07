@@ -17,13 +17,24 @@ import {
 import Page from 'src/components/Page';
 import Profile from '../../account/AccountView/Profile';
 import FormEntry from './Form';
+import SideOptions from './sideOptions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.light,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
+    padding: '0px'
+  },
+  muibox: {
+    padding: '0px'
+  },
+  '.MuiBox-root-22': {
+    padding: '0px'
+  },
+  gridSpace: {
+    padding: theme.spacing(0)
   }
 }));
 
@@ -35,27 +46,33 @@ const Account = () => {
       className={classes.root}
       title="Account"
     >
-      <Container maxWidth={false} disableGutters>
+      <Grid
+        container
+        direction="row"
+        spacing={0}
+      >
         <Grid
           container
-          spacing={3}
+          item
+          direction="column"
+          lg={8}
+          md={12}
+          xs={12}
         >
-          <Grid
-            item
-            lg={9}
-            md={12}
-            xs={12}
-          >
-            <FormEntry />
-          </Grid>
-          <Grid
-            item
-            lg={4}
-            md={12}
-            xs={12}
-          />
+          <FormEntry />
         </Grid>
-      </Container>
+        <Grid
+          alignItems="center"
+          container
+          item
+          direction="column"
+          lg={4}
+          md={12}
+          xs={12}
+        >
+          <SideOptions />
+        </Grid>
+      </Grid>
     </Page>
   );
 };

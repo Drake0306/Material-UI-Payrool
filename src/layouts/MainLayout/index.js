@@ -31,6 +31,14 @@ const useStyles = makeStyles((theme) => ({
 
 const MainLayout = () => {
   const classes = useStyles();
+  // const navigate = useNavigate();
+
+  // Check For Session Log
+  // const userName = localStorage.getItem('username');
+  // if (userName == null) {
+  //   alert('ok');
+  //   navigate('/login', { replace: true });
+  // }
 
   return (
     <div className={classes.root}>
