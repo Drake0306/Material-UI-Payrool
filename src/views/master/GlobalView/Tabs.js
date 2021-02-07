@@ -8,7 +8,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Entry from '../EmployeeMaster/Entry';
+import EntryEmployee from '../EmployeeMaster/Entry';
+import EntrySite from '../SiteMaster/Entry';
+import EntryDepartment from '../DepartmentMaster/Entry';
+import EntryDesignation from '../DesignationMaster/Entry';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -80,25 +83,25 @@ export default function ScrollableTabsButtonAuto() {
           style={{ backgroundColor: 'white', padding: '0px' }}
         >
           <Tab label="Employee" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
-          <Tab label="Item Four" {...a11yProps(3)} />
+          <Tab label="Site" {...a11yProps(1)} />
+          <Tab label="Department" {...a11yProps(2)} />
+          <Tab label="Designation" {...a11yProps(3)} />
           <Tab label="Item Five" {...a11yProps(4)} />
           <Tab label="Item Six" {...a11yProps(5)} />
           <Tab label="Item Seven" {...a11yProps(6)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <Entry />
+        <EntryEmployee />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <EntrySite />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <EntryDepartment />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+        <EntryDesignation />
       </TabPanel>
       <TabPanel value={value} index={4}>
         Item Five

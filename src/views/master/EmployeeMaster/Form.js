@@ -153,6 +153,10 @@ const top100Films = [
 
 const gender = [
   {
+    value: '',
+    label: 'SELECT'
+  },
+  {
     value: 'MALE',
     label: 'MALE'
   },
@@ -168,6 +172,10 @@ const gender = [
 
 const YesNoValue = [
   {
+    value: '',
+    label: 'SELECT'
+  },
+  {
     value: 'YES',
     label: 'YES'
   },
@@ -179,6 +187,10 @@ const YesNoValue = [
 
 const workingStatus = [
   {
+    value: '',
+    label: 'SELECT'
+  },
+  {
     value: 'WORKING',
     label: 'WORKING'
   },
@@ -188,7 +200,41 @@ const workingStatus = [
   },
 ];
 
+const PaymentMode = [
+  {
+    value: '',
+    label: 'SELECT'
+  },
+  {
+    value: 'WAGES',
+    label: 'WAGES'
+  },
+  {
+    value: 'SALARY',
+    label: 'SALARY'
+  },
+];
+
+const MRovertime = [
+  {
+    value: '',
+    label: 'SELECT'
+  },
+  {
+    value: '8',
+    label: '8\'h'
+  },
+  {
+    value: '12',
+    label: '12\'h'
+  },
+];
+
 const maritalStatus = [
+  {
+    value: '',
+    label: 'SELECT'
+  },
   {
     value: 'MARRIED',
     label: 'MARRIED'
@@ -216,11 +262,11 @@ const FormEntry = ({ className, ...rest }) => {
   const [values, setValues] = useState({
     // Personal Information
     employee_name: '',
-    gender: 'MALE',
-    marital_status: 'MARRIED',
+    gender: '',
+    marital_status: '',
     fathers_name: '',
     dob_date: '',
-    working_status: 'WORKING',
+    working_status: '',
     date_of_joining: '',
     date_of_resigning: '',
     // Residential Address
@@ -248,10 +294,10 @@ const FormEntry = ({ className, ...rest }) => {
     work_man_no: '',
     site: '',
     department: '',
-    designation: 'NO',
-    pf_applicable: 'NO',
+    designation: '',
+    pf_applicable: '',
     uan: '',
-    esic_applicable: 'NO',
+    esic_applicable: '',
     esic_no: '',
     reverse_pf_esi: 'NO',
     bonus_per_month: 'NO',
@@ -269,6 +315,27 @@ const FormEntry = ({ className, ...rest }) => {
     account_no: '',
     ifsc_code: '',
     account_holder_name: '',
+    // Addition and deduction
+    basic: '0.00',
+    pay_rate: '0.00',
+    actual_rate: '0.00',
+    da: '0.00',
+    hra: '0.00',
+    ca: '0.00',
+    food: '0.00',
+    miscellaneous: '0.00',
+    old_da: '0.00',
+    payment_mode: '',
+    sunday_payable: 'NO',
+    hra_check: false,
+    food_check: false,
+    ca_check: false,
+    miscellaneous_check: false,
+    leave_days: '0',
+    salary_on_attendance: '',
+    over_time_applicable: '',
+    over_time_on: '',
+    mr_over_time_hours: '',
 
   });
 
@@ -350,8 +417,11 @@ const FormEntry = ({ className, ...rest }) => {
   //   navigate('/app/master/list/employee', { replace: true });
   // };
 
-  const loadValue = (data) => {
-    alert(data);
+  const CheckValue = (e) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.checked
+    });
   };
 
   // to check auto fill data
@@ -482,6 +552,9 @@ const FormEntry = ({ className, ...rest }) => {
                 onChange={handleChange}
                 required
                 select
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 SelectProps={{ native: true }}
                 value={values.gender}
                 variant="outlined"
@@ -509,6 +582,9 @@ const FormEntry = ({ className, ...rest }) => {
                 onChange={handleChange}
                 required
                 select
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 SelectProps={{ native: true }}
                 value={values.marital_status}
                 variant="outlined"
@@ -571,6 +647,9 @@ const FormEntry = ({ className, ...rest }) => {
                 fullWidth
                 label="Select working status"
                 name="working_status"
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 onChange={handleChange}
                 select
                 SelectProps={{ native: true }}
@@ -676,7 +755,7 @@ const FormEntry = ({ className, ...rest }) => {
             >
               <TextField
                 id="standard-multiline-flexible"
-                label="Address line optional"
+                label="Address line opt"
                 helperText="This box is multiline"
                 multiline
                 name="address_line_2"
@@ -930,7 +1009,7 @@ const FormEntry = ({ className, ...rest }) => {
             >
               <TextField
                 id="standard-multiline-flexible"
-                label="Address line optional"
+                label="Address line opt"
                 multiline
                 name="address_line_2_permanent"
                 rowsMax={4}
@@ -1211,7 +1290,7 @@ const FormEntry = ({ className, ...rest }) => {
             >
               <TextField
                 fullWidth
-                label="Mobile Number (optional)"
+                label="Mobile Number (opt)"
                 type="number"
                 name="mobile_2"
                 onChange={handleChange}
@@ -1228,7 +1307,7 @@ const FormEntry = ({ className, ...rest }) => {
             >
               <TextField
                 fullWidth
-                label="Phone Number (optional)"
+                label="Phone Number (opt)"
                 type="number"
                 name="mobile_2"
                 onChange={handleChange}
@@ -1320,6 +1399,9 @@ const FormEntry = ({ className, ...rest }) => {
                 onChange={handleChange}
                 required
                 select
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 SelectProps={{ native: true }}
                 value={values.designation}
                 variant="outlined"
@@ -1397,6 +1479,9 @@ const FormEntry = ({ className, ...rest }) => {
                 onChange={handleChange}
                 required
                 select
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 SelectProps={{ native: true }}
                 value={values.pf_applicable}
                 variant="outlined"
@@ -1442,6 +1527,9 @@ const FormEntry = ({ className, ...rest }) => {
                 name="esic_applicable"
                 onChange={handleChange}
                 required
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 select
                 SelectProps={{ native: true }}
                 value={values.esic_applicable}
@@ -1803,12 +1891,111 @@ const FormEntry = ({ className, ...rest }) => {
               md={4}
               xs={12}
             >
-              <Autocomplete
-                id="combo-box-demo"
-                style={{marginTop: '16px'}}
-                options={top100Films}
-                getOptionLabel={(option) => option.title}
-                renderInput={(params) => <TextField {...params} label="Bank name" name="bank_name" onChange={handleChange} value={values.bank_name} required variant="outlined" />}
+              <TextField
+                fullWidth
+                label="Basic"
+                type="text"
+                required
+                name="basic"
+                onChange={handleChange}
+                value={values.basic}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={4}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Pay rate"
+                type="text"
+                required
+                name="pay_rate"
+                onChange={handleChange}
+                value={values.pay_rate}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={4}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Actual rate"
+                type="text"
+                required
+                name="actual_rate"
+                onChange={handleChange}
+                value={values.actual_rate}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={4}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="DA"
+                type="text"
+                required
+                name="da"
+                onChange={handleChange}
+                value={values.da}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={4}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="HRA"
+                type="text"
+                required
+                name="hra"
+                onChange={handleChange}
+                value={values.hra}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={4}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="CA"
+                type="text"
+                required
+                name="ca"
+                onChange={handleChange}
+                value={values.ca}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={4}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Food"
+                type="text"
+                required
+                name="food"
+                onChange={handleChange}
+                value={values.food}
+                variant="outlined"
               />
             </Grid>
 
@@ -1817,68 +2004,282 @@ const FormEntry = ({ className, ...rest }) => {
               md={4}
               xs={12}
             >
-              <Autocomplete
-                id="free-solo-demo"
-                freeSolo
-                options={top100Films.map((option) => option.title)}
-                renderInput={(params) => (
-                  <TextField {...params} label="Bank branch" value={values.bank_branch} name="bank_branch" margin="normal" variant="outlined" />
+              <TextField
+                fullWidth
+                label="Miscellaneous"
+                type="text"
+                required
+                name="miscellaneous"
+                onChange={handleChange}
+                value={values.miscellaneous}
+                variant="outlined"
+              />
+            </Grid>
+
+            <Grid
+              item
+              md={4}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Old DA"
+                type="text"
+                required
+                name="old_da"
+                onChange={handleChange}
+                value={values.old_da}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Select Payment Mode"
+                name="payment_mode"
+                onChange={handleChange}
+                required
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                select
+                SelectProps={{ native: true }}
+                value={values.payment_mode}
+                variant="outlined"
+              >
+                {PaymentMode.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Select Payment Mode"
+                name="sunday_payable"
+                onChange={handleChange}
+                required
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                select
+                SelectProps={{ native: true }}
+                value={values.sunday_payable}
+                variant="outlined"
+              >
+                {YesNoValue.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </TextField>
+            </Grid>
+
+            <Grid
+              item
+              md={3}
+              xs={12}
+            >
+              <FormControlLabel
+                control={(
+                  <Checkbox
+                    checked={values.hra_check}
+                    value={values.hra_check}
+                    onChange={CheckValue}
+                    name="hra_check"
+                    color="primary"
+                  />
                 )}
+                label="HRA Check"
+              />
+              <FormControlLabel
+                control={(
+                  <Checkbox
+                    checked={values.food_check}
+                    onChange={CheckValue}
+                    name="food_check"
+                    color="primary"
+                  />
+                )}
+                label="Food Check"
               />
             </Grid>
-            <Grid
-              item
-              md={4}
-              xs={12}
-            />
 
             <Grid
               item
-              md={4}
+              md={3}
+              xs={12}
+            >
+              <FormControlLabel
+                control={(
+                  <Checkbox
+                    checked={values.ca_check}
+                    onChange={CheckValue}
+                    name="ca_check"
+                    color="primary"
+                  />
+                )}
+                label="CA Check"
+              />
+              <FormControlLabel
+                control={(
+                  <Checkbox
+                    checked={values.miscellaneous_check}
+                    onChange={CheckValue}
+                    name="miscellaneous_check"
+                    color="primary"
+                  />
+                )}
+                label="Miscellaneous Check"
+              />
+            </Grid>
+            <Grid
+              item
+              md={6}
               xs={12}
             >
               <TextField
                 fullWidth
-                label="Account number"
+                label="Leave days"
                 type="text"
                 required
-                name="account_no"
+                name="leave_days"
                 onChange={handleChange}
-                value={values.account_no}
+                value={values.leave_days}
                 variant="outlined"
               />
             </Grid>
             <Grid
               item
-              md={4}
+              md={3}
               xs={12}
             >
               <TextField
                 fullWidth
-                label="IFSC code"
-                type="text"
-                required
-                name="ifsc_code"
+                label="Select Salary on attendance"
+                name="salary_on_attendance"
                 onChange={handleChange}
-                value={values.ifsc_code}
+                required
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                select
+                SelectProps={{ native: true }}
+                value={values.salary_on_attendance}
                 variant="outlined"
-              />
+              >
+                {YesNoValue.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </TextField>
             </Grid>
             <Grid
               item
-              md={4}
+              md={3}
               xs={12}
             >
               <TextField
                 fullWidth
-                label="Account holder name"
-                type="text"
-                required
-                name="account_holder_name"
+                label="Select Over time application"
+                name="over_time_applicable"
                 onChange={handleChange}
-                value={values.account_holder_name}
+                required
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                select
+                SelectProps={{ native: true }}
+                value={values.over_time_applicable}
                 variant="outlined"
-              />
+              >
+                {YesNoValue.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid
+              item
+              md={3}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Select Over time on"
+                name="over_time_on"
+                onChange={handleChange}
+                required
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                select
+                SelectProps={{ native: true }}
+                value={values.over_time_on}
+                variant="outlined"
+              >
+                {YesNoValue.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid
+              item
+              md={3}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Select MR over time hours"
+                name="mr_over_time_hours"
+                onChange={handleChange}
+                required
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                select
+                SelectProps={{ native: true }}
+                value={values.mr_over_time_hours}
+                variant="outlined"
+              >
+                {MRovertime.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </TextField>
             </Grid>
 
           </Grid>
