@@ -19,6 +19,12 @@ import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
 import GlobalMaster from 'src/views/master/GlobalView';
 import ListEmployee from 'src/views/master/EmployeeMaster/listEmployee';
+import ListSite from 'src/views/master/SiteMaster/listEmployee';
+import ListDepartment from 'src/views/master/DepartmentMaster/listEmployee';
+import ListDesignation from 'src/views/master/DesignationMaster/listEmployee';
+import EditSite from 'src/views/master/SiteMaster/Edit';
+import EditDepartment from 'src/views/master/DepartmentMaster/Edit';
+import EditDesignation from 'src/views/master/DesignationMaster/Edit';
 
 const userName = localStorage.getItem('username');
 var routes = [];
@@ -38,9 +44,18 @@ if (userName != null) {
         // Master
         { path: 'master', element: <GlobalMaster /> },
         { path: 'master/list/employee', element: <ListEmployee /> },
+
+        { path: 'master/list/site', element: <ListSite /> },
+        { path: 'master/edit/site/:id', element: <EditSite /> },
+
+        { path: 'master/list/department', element: <ListDepartment /> },
+        { path: 'master/edit/department/:id', element: <EditDepartment /> },
+
+        { path: 'master/list/designation', element: <ListDesignation /> },
+        { path: 'master/edit/designation/:id', element: <EditDesignation /> },
   
         // For Wrong Path
-        { path: '*', element: <Navigate to="/404" /> }
+        // { path: '*', element: <Navigate to="/404" /> }
       ]
     },
    

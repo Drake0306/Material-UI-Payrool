@@ -86,9 +86,9 @@ export default function ScrollableTabsButtonAuto() {
           <Tab label="Site" {...a11yProps(1)} />
           <Tab label="Department" {...a11yProps(2)} />
           <Tab label="Designation" {...a11yProps(3)} />
-          <Tab label="Item Five" {...a11yProps(4)} />
+          {/* <Tab label="Item Five" {...a11yProps(4)} />
           <Tab label="Item Six" {...a11yProps(5)} />
-          <Tab label="Item Seven" {...a11yProps(6)} />
+          <Tab label="Item Seven" {...a11yProps(6)} /> */}
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -103,7 +103,7 @@ export default function ScrollableTabsButtonAuto() {
       <TabPanel value={value} index={3}>
         <EntryDesignation />
       </TabPanel>
-      <TabPanel value={value} index={4}>
+      {/* <TabPanel value={value} index={4}>
         Item Five
       </TabPanel>
       <TabPanel value={value} index={5}>
@@ -111,7 +111,7 @@ export default function ScrollableTabsButtonAuto() {
       </TabPanel>
       <TabPanel value={value} index={6}>
         Item Seven
-      </TabPanel>
+      </TabPanel> */}
     </Box>
   );
 }

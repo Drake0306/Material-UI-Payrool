@@ -40,13 +40,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Toolbar = ({ className, ...rest }) => {
+const EditToolbar = ({ className, ...rest }) => {
   const classes = useStyles();
   const navigate = useNavigate();
 
   function handleClick(event) {
     event.preventDefault();
-    navigate('/app/master/', { replace: true });
+    navigate('/app/master/list/designation', { replace: true });
   }
 
   return (
@@ -60,7 +60,7 @@ const Toolbar = ({ className, ...rest }) => {
         justifyContent="flex-start"
       >
         <Typography className={classes.title} color="inherit" variant="subtitle1" component="div" style={{ fontSize: '25px' }}>
-          All Designation
+          Edit designation
         </Typography>
 
         {/* <Button className={classes.importButton}>
@@ -119,8 +119,8 @@ const Toolbar = ({ className, ...rest }) => {
   );
 };
 
-Toolbar.propTypes = {
+EditToolbar.propTypes = {
   className: PropTypes.string
 };
 
-export default Toolbar;
+export default EditToolbar;

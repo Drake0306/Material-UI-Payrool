@@ -3,7 +3,9 @@
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable no-restricted-globals */
-import React from 'react';
+/* eslint-disable prefer-template */
+/* eslint-disable arrow-parens */
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -21,6 +23,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import axios from 'axios';
 
 
 function Copyright() {
@@ -67,12 +70,56 @@ export default function SignIn() {
   const classes = useStyles();
 
   const navigate = useNavigate();
-  const username = localStorage.getItem('username');
+  const [values, setValues] = useState({
+    email: '',
+    password: '',
 
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // localStorage.setItem('url', 'http://127.0.0.1:8000/');
+    localStorage.setItem('url', 'http://dev.swirlitsolutions.com/payrool/');
+    console.log(e.target.user_name.value);
+    
+    const URL = localStorage.getItem('url');
+    axios.post(URL + 'api/log-in', values)
+      .then(respomse => {
+        console.log(respomse);
+        if (respomse.data.status === '400') {
+          alert('Not found');
+        } else {
+          localStorage.setItem('id', respomse.data.id);
+          localStorage.setItem('time', respomse.data.time);
+          localStorage.setItem('username', respomse.data.username);
+          if (respomse.data.username === 'admin') {
+            localStorage.setItem('user_role', 'Super Admin');
+          } else {
+            localStorage.setItem('user_role', 'N.A');
+          }
+          
+          // window.location.reload(true);
+          navigate('/app/dashboard', { replace: true });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        alert('Internal Server error');
+      });
+  };
+
+  const getData = (e) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.value
+    });
+  };
+
+
+  const username = localStorage.getItem('username');
   if (username != null) {
     navigate('/app/dashboard', { replace: true });
   }
-
   
   return (
     <Container component="main" maxWidth="xs">
@@ -84,80 +131,59 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Formik
-          initialValues={{
-            email: 'demo@devias.io',
-            password: 'Password123'
-          }}
-          validationSchema={Yup.object().shape({
-            email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-            password: Yup.string().max(255).required('Password is required')
-          })}
-          onSubmit={() => {
-            localStorage.setItem('username', 'demo@devias.io');
-            navigate('/app/dashboard', { replace: true });
-          }}
-        >
-          {({
-            errors,
-            handleBlur,
-            handleChange,
-            handleSubmit,
-            isSubmitting,
-            touched,
-            values
-          }) => (
-            <form onSubmit={handleSubmit} className={classes.form} noValidate>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" checked color="primary" />}
-                label="Remember me"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-              >
-                Sign In
-              </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  {/* <Link href="#" variant="body2">
-                    Don&apos;t have an account? Sign Up
-                  </Link> */}
-                </Grid>
-              </Grid>
-            </form>
-          )}
-        </Formik>
+        <form onSubmit={handleSubmit} className={classes.form}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="user_name"
+            label="User ID"
+            name="user_name"
+            value={values.user_name}
+            onChange={getData}
+            autoComplete="user_name"
+            autoFocus
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            onChange={getData}
+            value={values.password}
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+          <FormControlLabel
+            control={<Checkbox value="remember" checked color="primary" />}
+            label="Remember me"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              {/* <Link href="#" variant="body2">
+                Don&apos;t have an account? Sign Up
+              </Link> */}
+            </Grid>
+          </Grid>
+        </form>
       </div>
       <Box mt={8}>
         <Copyright />

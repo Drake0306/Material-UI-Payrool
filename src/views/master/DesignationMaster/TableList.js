@@ -11,7 +11,7 @@
 /* eslint-disable prefer-template */
 /* eslint-disable no-shadow */
 /* eslint-disable arrow-parens */
-import React from 'react';
+import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -34,29 +34,46 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import MaterialTable from 'material-table';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function BasicExport() {
   const { useState } = React;
   const [selectedRow, setSelectedRow] = useState(null);
 
+  const [values, setValues] = useState({
+    loadData: [],
+  });
+  const navigate = useNavigate();
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+
+  const loadNewPage = (id) => {
+    navigate('/app/master/edit/designation/' + id, { replace: true });
+  };
+
+  useEffect(() => {
+    const URL = localStorage.getItem('url');
+      axios.get(URL + 'api/designationList')
+      .then(respomse => {
+        console.log(respomse);
+        values.loadData = respomse.data;
+        forceUpdate();
+      })
+      .catch(error => {
+        console.log(error);
+        alert('Internal Server error');
+      });
+  }, []);
+
   return (
     <MaterialTable
       style={{fontFamily: 'Roboto, Helvetica, Arial, sans-serif', padding: '10px', fontSize: '14px', maxHeight: '500px', overflowX: 'auto'}}
-      title="Employee List"
+      title="Designation List"
       columns={[
+        { title: 'ID', field: 'id' },
         { title: 'Name', field: 'name' },
-        { title: 'Surname', field: 'surname' },
-        { title: 'Birth Year', field: 'birthYear' },
-        {
-          title: 'Birth Place',
-          field: 'birthCity',
-          lookup: { 34: 'jaction', 63: 'isume' },
-        },
       ]}
-      data={[
-        { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-        { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
-      ]}     
+      data={values.loadData}     
       onRowClick={((evt, selectedRow) => setSelectedRow(selectedRow.tableData.id))}   
       options={{
         exportButton: true,
@@ -70,19 +87,19 @@ export default function BasicExport() {
       actions={[
         {
           icon: 'edit',
-          tooltip: 'Edit Employee',
+          tooltip: 'Edit Designation',
           onClick: (event, rowData) => {
-            alert('You saved ' + rowData.name);
+            loadNewPage(rowData.id);
           }
         },
-        {
-          icon: 'keyboard_arrow_right',
-          position: 'row',
-          tooltip: 'View Employee',
-          onClick: (event, rowData) => {
-            alert('You saved ' + rowData.name);
-          }
-        },
+        // {
+        //   icon: 'keyboard_arrow_right',
+        //   position: 'row',
+        //   tooltip: 'View Designation',
+        //   onClick: (event, rowData) => {
+        //     alert('You saved ' + rowData.id);
+        //   }
+        // },
       ]}
     />
   );

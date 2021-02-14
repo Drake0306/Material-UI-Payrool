@@ -60,7 +60,7 @@ const Toolbar = ({ className, ...rest }) => {
         justifyContent="flex-start"
       >
         <Typography className={classes.title} color="inherit" variant="subtitle1" component="div" style={{ fontSize: '25px' }}>
-          All Employee
+          All Department
         </Typography>
 
         {/* <Button className={classes.importButton}>

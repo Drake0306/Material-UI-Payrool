@@ -14,8 +14,11 @@
 /* eslint-disable no-unneeded-ternary */
 /* eslint-disable padded-blocks */
 /* eslint-disable prefer-template */
+/* eslint-disable react/no-this-in-sfc */
+/* eslint-disable react/prop-types */
+/* eslint-disable prefer-destructuring */
 import 'date-fns';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
@@ -33,7 +36,7 @@ import {
 import ListIcon from '@material-ui/icons/List';
 import { Form, replace } from 'formik';
 import SaveIcon from '@material-ui/icons/Save';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import useForceUpdate from 'use-force-update';
@@ -53,7 +56,7 @@ const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-const FormEntry = ({ className, ...rest }) => {
+const EditForm = ({ props, className, ...rest }) => {
   const classes = useStyles();
   const [values, setValues] = useState({
     name: '',
@@ -64,6 +67,8 @@ const FormEntry = ({ className, ...rest }) => {
 
   const [options, setOptions] = React.useState([]);
   const loading = open && options.length === 0;
+
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   const [checkState, setCheckState] = React.useState({
     fillPaddress: false,
@@ -90,13 +95,39 @@ const FormEntry = ({ className, ...rest }) => {
     });
   };
 
+  // Getting value from location
+  let getIdExplode = [];
+  let getId = '';
+  const location = useLocation();
+  const currentPath = location.pathname;
+  getIdExplode = currentPath.split('/');
+  getId = getIdExplode[5];
+
+  const OnLoad = () => {
+    useEffect(() => {
+        const URL = localStorage.getItem('url');
+          axios.get(URL + 'api/department-update-list/' + getId)
+          .then(respomse => {
+            console.log(respomse);
+            values.name = respomse.data.name;
+            forceUpdate();
+          })
+          .catch(error => {
+            console.log(error);
+            alert('Internal Server error');
+          });
+      }, []);
+};
+
+OnLoad();
+
   const SendData = event => {
     event.preventDefault();
     // switch icon
     setClicked(true);
 
     let URL = localStorage.getItem('url');
-    axios.post(URL + 'api/site-add', values)
+    axios.post(URL + 'api/department-update/' + getId, values)
       .then(respomse => {
         console.log(respomse);
         if (respomse.status === 200) {
@@ -104,11 +135,10 @@ const FormEntry = ({ className, ...rest }) => {
           Swal.fire({
             position: 'center',
             icon: 'success',
-            title: 'Your work has been saved',
+            title: 'Your work has been updated',
             showConfirmButton: false,
             timer: 1500
           });
-          values.name = '';
 
         }
         if (respomse.data.status === 'exist') {
@@ -151,7 +181,7 @@ const FormEntry = ({ className, ...rest }) => {
       <Card>
         <CardHeader
           subheader="Make sure to fill all fields marked with *"
-          title="Create Site"
+          title="Create Department"
         />
         <Divider />
         <CardContent>
@@ -178,7 +208,7 @@ const FormEntry = ({ className, ...rest }) => {
               <TextField
                 fullWidth
                 helperText="Please specify name"
-                label="Site name"
+                label="Department name"
                 name="name"
                 onChange={handleChange}
                 required
@@ -213,9 +243,9 @@ const FormEntry = ({ className, ...rest }) => {
   );
 };
 
-FormEntry.propTypes = {
+EditForm.propTypes = {
   className: PropTypes.string
 };
 
-export default FormEntry;
+export default EditForm;
 

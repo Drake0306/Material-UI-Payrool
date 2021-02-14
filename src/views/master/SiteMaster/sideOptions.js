@@ -112,7 +112,7 @@ const SideOptions = ({ className, ...rest }) => {
 
   const navigate = useNavigate();
   const ListData = () => {
-    navigate('/app/master/list/employee', { replace: true });
+    navigate('/app/master/list/site', { replace: true });
   };
 
 
@@ -205,7 +205,7 @@ const SideOptions = ({ className, ...rest }) => {
                     onClick={ListData}
                     variant="contained"
                 >
-                    List All Employee
+                    List All Site
                 </Button>
             </Grid>
         </CardContent>

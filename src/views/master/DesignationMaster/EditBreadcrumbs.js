@@ -13,7 +13,7 @@ import {
   ArrowRight
 } from 'react-feather';
 
-export default function ActiveLastBreadcrumb() {
+export default function EditBreadcrumbs() {
   const navigate = useNavigate();
 
   function handleClick1(event) {
@@ -47,11 +47,17 @@ export default function ActiveLastBreadcrumb() {
       </Link>
       <Link
         color="textPrimary"
-        href="/app/master/list/designation"
+        href="/app/master"
         onClick={handleClick3}
         aria-current="page"
       >
-        <b>Designation List</b>
+        Designation List
+      </Link>
+      <Link
+        color="textPrimary"
+        aria-current="page"
+      >
+        <b>Designation Edit</b>
       </Link>
       
     </Breadcrumbs>

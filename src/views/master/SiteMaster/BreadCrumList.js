@@ -29,7 +29,7 @@ export default function ActiveLastBreadcrumb() {
   
   function handleClick3(event) {
     event.preventDefault();
-    navigate('/app/master/list/employee', { replace: true });
+    navigate('/app/master/list/site', { replace: true });
   }
 
   return (
@@ -51,7 +51,7 @@ export default function ActiveLastBreadcrumb() {
         onClick={handleClick3}
         aria-current="page"
       >
-        <b>Employee List</b>
+        <b>Site List</b>
       </Link>
       
     </Breadcrumbs>

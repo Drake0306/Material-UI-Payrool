@@ -12,6 +12,7 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable arrow-parens */
 /* eslint-disable no-unneeded-ternary */
+/* eslint-disable prefer-template */
 import 'date-fns';
 import React, { useState } from 'react';
 import clsx from 'clsx';
@@ -38,6 +39,8 @@ import useForceUpdate from 'use-force-update';
 import Typography from '@material-ui/core/Typography';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function sleep(delay = 0) {
   return new Promise((resolve) => {
@@ -52,7 +55,7 @@ const useStyles = makeStyles(() => ({
 const FormEntry = ({ className, ...rest }) => {
   const classes = useStyles();
   const [values, setValues] = useState({
-    designation_name: '',
+    name: '',
 
   });
 
@@ -65,48 +68,6 @@ const FormEntry = ({ className, ...rest }) => {
   const [checkState, setCheckState] = React.useState({
     fillPaddress: false,
   });
-
-  // Get Data
-
-  React.useEffect(() => {
-    let active = true;
-
-    if (!loading) {
-      return undefined;
-    }
-
-    (async () => {
-      const response = await fetch('https://country.register.gov.uk/records.json?page-size=5000');
-      // const response = await fetch('https://wft-geo-db.p.rapidapi.com/v1/geo/cities', {
-      //   method: 'GET',
-      //   headers: {
-      //     'x-rapidapi-key': 'e172080b4emshde3e4181d1129a3p15ab6djsnd7e3258efdc7',
-      //     'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
-      //   }
-      // });
-      console.log(response);
-      await sleep(1e3); // For demo purposes.
-      const countries = await response.json();
-
-      if (active) {
-        setOptions(Object.keys(countries).map((key) => countries[key].item[0]));
-      }
-    })();
-
-    return () => {
-      active = false;
-    };
-  }, [loading]);
-
-  React.useEffect(() => {
-    if (!open) {
-      setOptions([]);
-    }
-  }, [open]);
-
-  // End Get data
-
-
 
   const handleChange = (event) => {
     setValues({
@@ -132,15 +93,46 @@ const FormEntry = ({ className, ...rest }) => {
     // switch icon
     setClicked(true);
 
-    let Array = {
-      site_name: event.target.site_name.value,
-    };
+    let URL = localStorage.getItem('url');
+    axios.post(URL + 'api/designation-add', values)
+      .then(respomse => {
+        console.log(respomse);
+        if (respomse.status === 200) {
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Your work has been saved',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          values.name = '';
+        }
+        if (respomse.data === 'exist') {
+          Swal.fire({
+            icon: 'info',
+            title: 'Already exist',
+            text: 'Enter new one',
+            timer: 2000,
+            // footer: '<a href>Why do I have this issue?</a>'
+          });
+        }
 
-    console.log(Array);
-    setTimeout(
-      () => setClicked(false),
-      3000
-    );
+        // switch icon
+        setClicked(false);
+      })
+      .catch(error => {
+        console.log(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Internal server error',
+          text: 'Something went wrong!',
+          timer: 3000,
+          // footer: '<a href>Why do I have this issue?</a>'
+        });
+
+        // switch icon
+        setClicked(false);
+      });
   };
 
   return (
@@ -182,10 +174,10 @@ const FormEntry = ({ className, ...rest }) => {
                 fullWidth
                 helperText="Please specify name"
                 label="Designation  name"
-                name="designation_name"
+                name="name"
                 onChange={handleChange}
                 required
-                value={values.designation_name}
+                value={values.name}
                 variant="outlined"
               />
             </Grid>

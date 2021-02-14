@@ -12,6 +12,7 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable arrow-parens */
 /* eslint-disable no-unneeded-ternary */
+/* eslint-disable prefer-template */
 import 'date-fns';
 import React, { useState } from 'react';
 import clsx from 'clsx';
@@ -38,6 +39,8 @@ import useForceUpdate from 'use-force-update';
 import Typography from '@material-ui/core/Typography';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function sleep(delay = 0) {
   return new Promise((resolve) => {
@@ -47,106 +50,16 @@ function sleep(delay = 0) {
 
 // Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 const top100Films = [
-  { title: 'The Shawshank Redemption', year: 1994 },
-  { title: 'The Godfather', year: 1972 },
-  { title: 'The Godfather: Part II', year: 1974 },
-  { title: 'The Dark Knight', year: 2008 },
-  { title: '12 Angry Men', year: 1957 },
-  { title: "Schindler's List", year: 1993 },
-  { title: 'Pulp Fiction', year: 1994 },
-  { title: 'The Lord of the Rings: The Return of the King', year: 2003 },
-  { title: 'The Good, the Bad and the Ugly', year: 1966 },
-  { title: 'Fight Club', year: 1999 },
-  { title: 'The Lord of the Rings: The Fellowship of the Ring', year: 2001 },
-  { title: 'Star Wars: Episode V - The Empire Strikes Back', year: 1980 },
-  { title: 'Forrest Gump', year: 1994 },
-  { title: 'Inception', year: 2010 },
-  { title: 'The Lord of the Rings: The Two Towers', year: 2002 },
-  { title: "One Flew Over the Cuckoo's Nest", year: 1975 },
-  { title: 'Goodfellas', year: 1990 },
-  { title: 'The Matrix', year: 1999 },
-  { title: 'Seven Samurai', year: 1954 },
-  { title: 'Star Wars: Episode IV - A New Hope', year: 1977 },
-  { title: 'City of God', year: 2002 },
-  { title: 'Se7en', year: 1995 },
-  { title: 'The Silence of the Lambs', year: 1991 },
-  { title: "It's a Wonderful Life", year: 1946 },
-  { title: 'Life Is Beautiful', year: 1997 },
-  { title: 'The Usual Suspects', year: 1995 },
-  { title: 'Léon: The Professional', year: 1994 },
-  { title: 'Spirited Away', year: 2001 },
-  { title: 'Saving Private Ryan', year: 1998 },
-  { title: 'Once Upon a Time in the West', year: 1968 },
-  { title: 'American History X', year: 1998 },
-  { title: 'Interstellar', year: 2014 },
-  { title: 'Casablanca', year: 1942 },
-  { title: 'City Lights', year: 1931 },
-  { title: 'Psycho', year: 1960 },
-  { title: 'The Green Mile', year: 1999 },
-  { title: 'The Intouchables', year: 2011 },
-  { title: 'Modern Times', year: 1936 },
-  { title: 'Raiders of the Lost Ark', year: 1981 },
-  { title: 'Rear Window', year: 1954 },
-  { title: 'The Pianist', year: 2002 },
-  { title: 'The Departed', year: 2006 },
-  { title: 'Terminator 2: Judgment Day', year: 1991 },
-  { title: 'Back to the Future', year: 1985 },
-  { title: 'Whiplash', year: 2014 },
-  { title: 'Gladiator', year: 2000 },
-  { title: 'Memento', year: 2000 },
-  { title: 'The Prestige', year: 2006 },
-  { title: 'The Lion King', year: 1994 },
-  { title: 'Apocalypse Now', year: 1979 },
-  { title: 'Alien', year: 1979 },
-  { title: 'Sunset Boulevard', year: 1950 },
-  { title: 'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb', year: 1964 },
-  { title: 'The Great Dictator', year: 1940 },
-  { title: 'Cinema Paradiso', year: 1988 },
-  { title: 'The Lives of Others', year: 2006 },
-  { title: 'Grave of the Fireflies', year: 1988 },
-  { title: 'Paths of Glory', year: 1957 },
-  { title: 'Django Unchained', year: 2012 },
-  { title: 'The Shining', year: 1980 },
-  { title: 'WALL·E', year: 2008 },
-  { title: 'American Beauty', year: 1999 },
-  { title: 'The Dark Knight Rises', year: 2012 },
-  { title: 'Princess Mononoke', year: 1997 },
-  { title: 'Aliens', year: 1986 },
-  { title: 'Oldboy', year: 2003 },
-  { title: 'Once Upon a Time in America', year: 1984 },
-  { title: 'Witness for the Prosecution', year: 1957 },
-  { title: 'Das Boot', year: 1981 },
-  { title: 'Citizen Kane', year: 1941 },
-  { title: 'North by Northwest', year: 1959 },
-  { title: 'Vertigo', year: 1958 },
-  { title: 'Star Wars: Episode VI - Return of the Jedi', year: 1983 },
-  { title: 'Reservoir Dogs', year: 1992 },
-  { title: 'Braveheart', year: 1995 },
-  { title: 'M', year: 1931 },
-  { title: 'Requiem for a Dream', year: 2000 },
-  { title: 'Amélie', year: 2001 },
-  { title: 'A Clockwork Orange', year: 1971 },
-  { title: 'Like Stars on Earth', year: 2007 },
-  { title: 'Taxi Driver', year: 1976 },
-  { title: 'Lawrence of Arabia', year: 1962 },
-  { title: 'Double Indemnity', year: 1944 },
-  { title: 'Eternal Sunshine of the Spotless Mind', year: 2004 },
-  { title: 'Amadeus', year: 1984 },
-  { title: 'To Kill a Mockingbird', year: 1962 },
-  { title: 'Toy Story 3', year: 2010 },
-  { title: 'Logan', year: 2017 },
-  { title: 'Full Metal Jacket', year: 1987 },
-  { title: 'Dangal', year: 2016 },
-  { title: 'The Sting', year: 1973 },
-  { title: '2001: A Space Odyssey', year: 1968 },
-  { title: "Singin' in the Rain", year: 1952 },
-  { title: 'Toy Story', year: 1995 },
-  { title: 'Bicycle Thieves', year: 1948 },
-  { title: 'The Kid', year: 1921 },
-  { title: 'Inglourious Basterds', year: 2009 },
-  { title: 'Snatch', year: 2000 },
-  { title: '3 Idiots', year: 2009 },
-  { title: 'Monty Python and the Holy Grail', year: 1975 },
+  { value: 1, title: 'The Shawshank Redemption', year: 1994 },
+  { value: 2, title: 'The Godfather', year: 1972 },
+  { value: 3, title: 'The Godfather: Part II', year: 1974 },
+  { value: 4, title: 'The Dark Knight', year: 2008 },
+  { value: 5, title: '12 Angry Men', year: 1957 },
+  { value: 6, title: "Schindler's List", year: 1993 },
+  { value: 7, title: 'Pulp Fiction', year: 1994 },
+  { value: 8, title: 'The Lord of the Rings: The Return of the King', year: 2003 },
+  { value: 9, title: 'The Good, the Bad and the Ugly', year: 1966 },
+  { value: 10, title: 'Fight Club', year: 1999 },
 ];
 
 
@@ -278,8 +191,8 @@ const FormEntry = ({ className, ...rest }) => {
     police_station: '',
     city_village: '',
     district: '',
-    state: '',
-    country: 'India',
+    state: '1',
+    country: '2',
     pin_code: '',
     // contact and address proof
     email: '',
@@ -336,10 +249,6 @@ const FormEntry = ({ className, ...rest }) => {
     over_time_applicable: '',
     over_time_on: '',
     mr_over_time_hours: '',
-
-  });
-
-  const [perValues, setPerValues] = useState({
     // Permanent Address
     address_line_1_permanent: '',
     address_line_2_permanent: '',
@@ -352,7 +261,23 @@ const FormEntry = ({ className, ...rest }) => {
     state_permanent: '',
     country_permanent: 'India',
     pin_code_permanent: '',
+
   });
+
+  // const [perValues, setPerValues] = useState({
+  //   // Permanent Address
+  //   address_line_1_permanent: '',
+  //   address_line_2_permanent: '',
+  //   area_permanent: '',
+  //   landmark_permanent: '',
+  //   post_office_permanent: '',
+  //   police_station_permanent: '',
+  //   city_village_permanent: '',
+  //   district_permanent: '',
+  //   state_permanent: '',
+  //   country_permanent: 'India',
+  //   pin_code_permanent: '',
+  // });
   const [open, setOpen] = React.useState(false);
   const [clicked, setClicked] = useState(false);
 
@@ -362,48 +287,6 @@ const FormEntry = ({ className, ...rest }) => {
   const [checkState, setCheckState] = React.useState({
     fillPaddress: false,
   });
-
-  // Get Data
-
-  React.useEffect(() => {
-    let active = true;
-
-    if (!loading) {
-      return undefined;
-    }
-
-    (async () => {
-      const response = await fetch('https://country.register.gov.uk/records.json?page-size=5000');
-      // const response = await fetch('https://wft-geo-db.p.rapidapi.com/v1/geo/cities', {
-      //   method: 'GET',
-      //   headers: {
-      //     'x-rapidapi-key': 'e172080b4emshde3e4181d1129a3p15ab6djsnd7e3258efdc7',
-      //     'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
-      //   }
-      // });
-      console.log(response);
-      await sleep(1e3); // For demo purposes.
-      const countries = await response.json();
-
-      if (active) {
-        setOptions(Object.keys(countries).map((key) => countries[key].item[0]));
-      }
-    })();
-
-    return () => {
-      active = false;
-    };
-  }, [loading]);
-
-  React.useEffect(() => {
-    if (!open) {
-      setOptions([]);
-    }
-  }, [open]);
-
-  // End Get data
-
-
 
   const handleChange = (event) => {
     setValues({
@@ -431,7 +314,8 @@ const FormEntry = ({ className, ...rest }) => {
     });
 
     if (event.target.checked === true) {
-      setPerValues({
+      setValues({
+        ...values,
         // Permanent Address
         address_line_1_permanent: values.address_line_1,
         address_line_2_permanent: values.address_line_2,
@@ -446,7 +330,8 @@ const FormEntry = ({ className, ...rest }) => {
         pin_code_permanent: values.pin_code,
       });
     } else {
-      setPerValues({
+      setValues({
+        ...values,
         address_line_1_permanent: '',
         address_line_2_permanent: '',
         area_permanent: '',
@@ -456,7 +341,7 @@ const FormEntry = ({ className, ...rest }) => {
         city_village_permanent: '',
         district_permanent: '',
         state_permanent: '',
-        country_permanent: 'India',
+        country_permanent: '',
         pin_code_permanent: '',
       });
     }
@@ -467,16 +352,47 @@ const FormEntry = ({ className, ...rest }) => {
     event.preventDefault();
     // switch icon
     setClicked(true);
+    console.log(values);
+    let URL = localStorage.getItem('url');
+    axios.post(URL + 'api/employee-add', values)
+      .then(respomse => {
+        console.log(respomse);
+        if (respomse.status === 200) {
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Your work has been saved',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          values.name = '';
+        }
+        if (respomse.data === 'exist') {
+          Swal.fire({
+            icon: 'info',
+            title: 'Already exist',
+            text: 'Enter new one',
+            timer: 2000,
+            // footer: '<a href>Why do I have this issue?</a>'
+          });
+        }
 
-    let Array = {
-      site: event.target.site.value,
-    };
+        // switch icon
+        setClicked(false);
+      })
+      .catch(error => {
+        console.log(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Internal server error',
+          text: 'Something went wrong!',
+          timer: 3000,
+          // footer: '<a href>Why do I have this issue?</a>'
+        });
 
-    console.log(Array);
-    setTimeout(
-      () => setClicked(false),
-      3000
-    );
+        // switch icon
+        setClicked(false);
+      });
   };
 
   // const DemoView = event => {
@@ -487,7 +403,8 @@ const FormEntry = ({ className, ...rest }) => {
   return (
     <form
       autoComplete="false"
-      Validate
+      // Validate
+      noValidate
       onSubmit={SendData}
       className={clsx(classes.root, className)}
       {...rest}
@@ -844,90 +761,6 @@ const FormEntry = ({ className, ...rest }) => {
 
             <Grid
               item
-              md={3}
-              xs={12}
-            >
-
-              <Autocomplete
-                id="asynchronous-demo"
-                open={open}
-                onOpen={() => {
-                  setOpen(true);
-                }}
-                onClose={() => {
-                  setOpen(false);
-                }}
-                getOptionSelected={(option, value) => option.name === value.name}
-                getOptionLabel={(option) => option.name}
-                options={options}
-                loading={loading}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Select state"
-                    name="country"
-                    defaultValue={values.country}
-                    variant="outlined"
-                    required
-                    InputProps={{
-                      ...params.InputProps,
-                      endAdornment: (
-                        <React.Fragment>
-                          {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                          {params.InputProps.endAdornment}
-                        </React.Fragment>
-                      ),
-                    }}
-                  />
-                )}
-              />
-
-            </Grid>
-
-            <Grid
-              item
-              md={3}
-              xs={12}
-            >
-
-              <Autocomplete
-                id="asynchronous-demo"
-                open={open}
-                onOpen={() => {
-                  setOpen(true);
-                }}
-                onClose={() => {
-                  setOpen(false);
-                }}
-                getOptionSelected={(option, value) => option.name === value.name}
-                getOptionLabel={(option) => option.name}
-                options={options}
-                loading={loading}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Select country"
-                    name="country"
-                    defaultValue={values.country}
-                    variant="outlined"
-                    required
-                    InputProps={{
-                      ...params.InputProps,
-                      endAdornment: (
-                        <React.Fragment>
-                          {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                          {params.InputProps.endAdornment}
-                        </React.Fragment>
-                      ),
-                    }}
-                  />
-                )}
-              />
-
-            </Grid>
-
-            <Grid
-              item
               md={6}
               xs={12}
             >
@@ -945,6 +778,50 @@ const FormEntry = ({ className, ...rest }) => {
                 value={values.pin_code}
                 variant="outlined"
               />
+            </Grid>
+
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+
+            <Autocomplete
+              id="combo-box-demo"
+              // onChange={(event, value) => console.log(value)}
+              style={{marginTop: '16px'}}
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              onChange={handleChange}
+              // id="combo-box-demo"
+              // // onChange={(event, value) => console.log(value)}
+              // autoSelect
+              // style={{marginTop: '16px'}}
+              // options={top100Films}
+              // value={values.country}
+              // getOptionLabel={(option) => option.title}
+              // defaultValue={values.country}
+              // // value={top100Films.find(v => v.value === values.country) || {}}
+              // onChange={handleChange}
+              renderInput={(params) => <TextField {...params} label="Select Country" value={values.country} name="country" required variant="outlined" />}
+            />
+
+            </Grid>
+
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+
+            <Autocomplete
+              id="combo-box-demo"
+              style={{marginTop: '16px'}}
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              renderInput={(params) => <TextField {...params} label="Select State" name="state" onChange={handleChange} value={values.state} required variant="outlined" />}
+            />
+
             </Grid>
 
           </Grid>
@@ -996,7 +873,7 @@ const FormEntry = ({ className, ...rest }) => {
                 rowsMax={4}
                 helperText="This box is multiline"
                 fullWidth
-                value={perValues.address_line_1_permanent}
+                value={values.address_line_1_permanent}
                 variant="outlined"
                 onChange={handleChange}
               />
@@ -1015,7 +892,7 @@ const FormEntry = ({ className, ...rest }) => {
                 rowsMax={4}
                 helperText="This box is multiline"
                 fullWidth
-                value={perValues.address_line_2_permanent}
+                value={values.address_line_2_permanent}
                 variant="outlined"
                 onChange={handleChange}
               />
@@ -1031,7 +908,7 @@ const FormEntry = ({ className, ...rest }) => {
                 label="Area"
                 name="area_permanent"
                 onChange={handleChange}
-                value={perValues.area_permanent}
+                value={values.area_permanent}
                 variant="outlined"
               />
             </Grid>
@@ -1046,7 +923,7 @@ const FormEntry = ({ className, ...rest }) => {
                 label="Landmark"
                 name="landmark_permanent"
                 onChange={handleChange}
-                value={perValues.landmark_permanent}
+                value={values.landmark_permanent}
                 variant="outlined"
               />
             </Grid>
@@ -1061,7 +938,7 @@ const FormEntry = ({ className, ...rest }) => {
                 label="Post office"
                 name="post_office_permanent"
                 onChange={handleChange}
-                value={perValues.post_office_permanent}
+                value={values.post_office_permanent}
                 variant="outlined"
               />
             </Grid>
@@ -1076,7 +953,7 @@ const FormEntry = ({ className, ...rest }) => {
                 label="City village"
                 name="city_village_permanent"
                 onChange={handleChange}
-                value={perValues.city_village_permanent}
+                value={values.city_village_permanent}
                 variant="outlined"
               />
             </Grid>
@@ -1091,95 +968,10 @@ const FormEntry = ({ className, ...rest }) => {
                 label="District"
                 name="district_permanent"
                 onChange={handleChange}
-                value={perValues.district_permanent}
+                value={values.district_permanent}
                 variant="outlined"
               />
             </Grid>
-
-            <Grid
-              item
-              md={3}
-              xs={12}
-            >
-
-              <Autocomplete
-                id="asynchronous-demo"
-                open={open}
-                onOpen={() => {
-                  setOpen(true);
-                }}
-                onClose={() => {
-                  setOpen(false);
-                }}
-                getOptionSelected={(option, value) => option.name === value.name}
-                getOptionLabel={(option) => option.name}
-                options={options}
-                loading={loading}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Select state"
-                    name="country_permanent"
-                    defaultValue={perValues.country_permanent}
-                    variant="outlined"
-                    required
-                    InputProps={{
-                      ...params.InputProps,
-                      endAdornment: (
-                        <React.Fragment>
-                          {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                          {params.InputProps.endAdornment}
-                        </React.Fragment>
-                      ),
-                    }}
-                  />
-                )}
-              />
-
-            </Grid>
-
-            <Grid
-              item
-              md={3}
-              xs={12}
-            >
-
-              <Autocomplete
-                id="asynchronous-demo"
-                open={open}
-                onOpen={() => {
-                  setOpen(true);
-                }}
-                onClose={() => {
-                  setOpen(false);
-                }}
-                getOptionSelected={(option, value) => option.name === value.name}
-                getOptionLabel={(option) => option.name}
-                options={options}
-                loading={loading}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Select country"
-                    name="country_permanent"
-                    defaultValue={perValues.country_permanent}
-                    variant="outlined"
-                    required
-                    InputProps={{
-                      ...params.InputProps,
-                      endAdornment: (
-                        <React.Fragment>
-                          {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                          {params.InputProps.endAdornment}
-                        </React.Fragment>
-                      ),
-                    }}
-                  />
-                )}
-              />
-
-            </Grid>
-
             <Grid
               item
               md={6}
@@ -1196,9 +988,41 @@ const FormEntry = ({ className, ...rest }) => {
                 }}
                 onChange={handleChange}
                 required
-                value={perValues.pin_code_permanent}
+                value={values.pin_code_permanent}
                 variant="outlined"
               />
+            </Grid>
+
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+
+              <Autocomplete
+                id="combo-box-demo"
+                style={{marginTop: '16px'}}
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                renderInput={(params) => <TextField {...params} label="Select State" name="state" onChange={handleChange} value={values.country_permanent} required variant="outlined" />}
+              />
+
+            </Grid>
+
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+
+              <Autocomplete
+                id="combo-box-demo"
+                style={{marginTop: '16px'}}
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                renderInput={(params) => <TextField {...params} label="Select State" name="state" onChange={handleChange} value={values.country_permanent} required variant="outlined" />}
+              />
+
             </Grid>
 
           </Grid>
@@ -1422,24 +1246,13 @@ const FormEntry = ({ className, ...rest }) => {
               md={6}
               xs={12}
             >
-              <Autocomplete
-                freeSolo
-                id="free-solo-2-demo"
-                disableClearable
-                options={top100Films.map((option) => option.title)}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Site"
-                    margin="normal"
-                    required
-                    name="site"
-                    value={values.site}
-                    variant="outlined"
-                    InputProps={{ ...params.InputProps, type: 'search' }}
-                  />
-                )}
-              />
+            <Autocomplete
+              id="combo-box-demo"
+              style={{marginTop: '16px'}}
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              renderInput={(params) => <TextField {...params} label="Site" name="site" onChange={handleChange} value={values.site} required variant="outlined" />}
+            />
             </Grid>
 
             <Grid
@@ -1448,22 +1261,11 @@ const FormEntry = ({ className, ...rest }) => {
               xs={12}
             >
               <Autocomplete
-                freeSolo
-                id="free-solo-2-demo"
-                disableClearable
-                options={top100Films.map((option) => option.title)}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Department"
-                    margin="normal"
-                    required
-                    name="department"
-                    value={values.department}
-                    variant="outlined"
-                    InputProps={{ ...params.InputProps, type: 'search' }}
-                  />
-                )}
+                id="combo-box-demo"
+                style={{marginTop: '16px'}}
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                renderInput={(params) => <TextField {...params} label="Department" name="department" onChange={handleChange} value={values.department} required variant="outlined" />}
               />
             </Grid>
 
@@ -2167,7 +1969,7 @@ const FormEntry = ({ className, ...rest }) => {
             </Grid>
             <Grid
               item
-              md={3}
+              md={4}
               xs={12}
             >
               <TextField
@@ -2196,7 +1998,7 @@ const FormEntry = ({ className, ...rest }) => {
             </Grid>
             <Grid
               item
-              md={3}
+              md={4}
               xs={12}
             >
               <TextField
@@ -2225,7 +2027,7 @@ const FormEntry = ({ className, ...rest }) => {
             </Grid>
             <Grid
               item
-              md={3}
+              md={4}
               xs={12}
             >
               <TextField
@@ -2254,7 +2056,7 @@ const FormEntry = ({ className, ...rest }) => {
             </Grid>
             <Grid
               item
-              md={3}
+              md={4}
               xs={12}
             >
               <TextField
